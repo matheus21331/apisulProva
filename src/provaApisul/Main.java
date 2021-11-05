@@ -10,7 +10,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.json.simple.*;
 import org.json.simple.JSONArray;
@@ -21,55 +23,62 @@ public class Main {
 	
 	public static void main(String[] args) {
 		JSONParser parser = new JSONParser();
-	     ArrayList<Integer> todosElevadores = new ArrayList<>(5);
-      ArrayList<Character> elevadorMaisUsado = new ArrayList<>();
-      ArrayList<Integer> elevadoresNumero = new ArrayList<>(6);
+		Map< String, Integer> elevadoresQuantidade = new HashMap<String, Integer>();
+		List<Character> elevadorMaisUsado = new ArrayList<>();
 
-
-	     for(int i = 0; i<6; i++) {
-	    	 todosElevadores.add(0);
-	     }
-
-	      for(int i = 0; i<6; i++) {
-	    	  elevadoresNumero.add(0);
-		     }
+	  
 		 try {
 
 			 	Object obj = parser.parse(new FileReader( "C:\\Users\\mathe\\eclipse-workspace\\ApisulProva\\src\\provaApisul\\input.json" ));
 	            JSONArray jsonarray = (JSONArray)obj;
-	            ArrayList<Character> elevadores = new ArrayList<>(Arrays.asList(new Character[jsonarray.size()]));
-	            Collections.fill(elevadores, null);
-
+	     
+	            int quantidadeA = 0;
+	            int quantidadeB = 0;
+	            int quantidadeC = 0;
+	            int quantidadeD = 0;
+	            int quantidadeE = 0;
 	            for (int i = 0; i < jsonarray.size(); i++) {
+
 	                JSONObject jsonObject = (JSONObject)jsonarray.get(i);
 	                String elevador=  jsonObject.get("elevador").toString();
+
 	                switch (elevador) {
-					case "A":
+						case "A":
+							quantidadeA++;
+							elevadoresQuantidade.put(elevador, quantidadeA);
+							break;
+						case "B":
+							quantidadeB++;
+							elevadoresQuantidade.put(elevador, quantidadeB);
+							break;
 						
-						elevadoresNumero.set(i,0);
-						break;
-					case "B":
-						elevadoresNumero.set(i,1);
-						break;
-					
-					case "C":
-						elevadoresNumero.set(i,2);
-						break;
-					case "D":
-						elevadoresNumero.set(i,3);
-						break;
-					case "E":
-						elevadoresNumero.set(i,4);
-						break;
-					}
-					
-	                int quantidade = todosElevadores.get(i);
-	                quantidade++;
-	                todosElevadores.set(elevadoresNumero.get(i),quantidade);
+						case "C":
+							quantidadeC++;
+							elevadoresQuantidade.put(elevador, quantidadeC);
+							break;
+						case "D":
+							quantidadeD++;
+							elevadoresQuantidade.put(elevador, quantidadeD);
+							break;
+						case "E":
+							quantidadeE++;
+							elevadoresQuantidade.put(elevador, quantidadeE);
+							break;					
+						}
+	               
 	               
 	            }
-	        
-
+                int currentMaxValuevalue = Integer.MIN_VALUE;
+                for (Entry<String, Integer> entry : elevadoresQuantidade.entrySet()){
+                    if (entry.getValue() > currentMaxValuevalue){
+                    	elevadorMaisUsado.clear();
+                    	elevadorMaisUsado.add(entry.getKey().charAt(0));
+                        currentMaxValuevalue = entry.getValue();
+                    } else if (entry.getValue() == currentMaxValuevalue){
+                    	elevadorMaisUsado.add(entry.getKey().charAt(0));
+                    }            
+                }
+                System.out.println(elevadorMaisUsado);
 		 }
 	        catch(FileNotFoundException fe)
 	        {
