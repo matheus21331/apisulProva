@@ -1,93 +1,23 @@
 package provaApisul;
 
-import java.io.FileNotFoundException;
+import java.text.DecimalFormat;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import org.json.simple.*;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 public class Main {
 	
 	public static void main(String[] args) {
-		JSONParser parser = new JSONParser();
-		Map< String, Integer> elevadoresQuantidade = new HashMap<String, Integer>();
-		List<Character> elevadorMaisUsado = new ArrayList<>();
+        DecimalFormat df = new DecimalFormat("##.##");
 
-	  
-		 try {
+		ElevadorService service = new ElevadorService();
+		System.out.println("Andar ou andares menos utilizados: " + service.andarMenosUtilizado() );
+		System.out.println("Elevador ou elevadores mais utilzado: " + service.elevadorMaisFrequentado() + ", e o turno que mais usou esse elevador foi: "+ service.periodoMaiorFluxoElevadorMaisFrequentado());
+		System.out.println("Elevador ou elevadores menos utilzado: " + service.elevadorMenosFrequentado() + ", e o turno que menos usou esse elevador foi: "+ service.periodoMenorFluxoElevadorMenosFrequentado());
+		System.out.println("Percentual elevador A: " + df.format(service.percentualDeUsoElevadorA())+"%");
+		System.out.println("Percentual elevador B: " + df.format(service.percentualDeUsoElevadorB())+"%");
+		System.out.println("Percentual elevador C: " + df.format(service.percentualDeUsoElevadorC())+"%");
+		System.out.println("Percentual elevador D: " + df.format(service.percentualDeUsoElevadorD())+"%");
+		System.out.println("Percentual elevador E: " + df.format(service.percentualDeUsoElevadorE())+"%");
+		System.out.println("Turno com mais utilização dos elevadores: " + service.periodoMaiorUtilizacaoConjuntoElevadores());
+	
 
-			 	Object obj = parser.parse(new FileReader( "C:\\Users\\mathe\\eclipse-workspace\\ApisulProva\\src\\provaApisul\\input.json" ));
-	            JSONArray jsonarray = (JSONArray)obj;
-	     
-	            int quantidadeA = 0;
-	            int quantidadeB = 0;
-	            int quantidadeC = 0;
-	            int quantidadeD = 0;
-	            int quantidadeE = 0;
-	            for (int i = 0; i < jsonarray.size(); i++) {
-
-	                JSONObject jsonObject = (JSONObject)jsonarray.get(i);
-	                String elevador=  jsonObject.get("elevador").toString();
-
-	                switch (elevador) {
-						case "A":
-							quantidadeA++;
-							elevadoresQuantidade.put(elevador, quantidadeA);
-							break;
-						case "B":
-							quantidadeB++;
-							elevadoresQuantidade.put(elevador, quantidadeB);
-							break;
-						
-						case "C":
-							quantidadeC++;
-							elevadoresQuantidade.put(elevador, quantidadeC);
-							break;
-						case "D":
-							quantidadeD++;
-							elevadoresQuantidade.put(elevador, quantidadeD);
-							break;
-						case "E":
-							quantidadeE++;
-							elevadoresQuantidade.put(elevador, quantidadeE);
-							break;					
-						}
-	               
-	               
-	            }
-                int currentMaxValuevalue = Integer.MIN_VALUE;
-                for (Entry<String, Integer> entry : elevadoresQuantidade.entrySet()){
-                    if (entry.getValue() > currentMaxValuevalue){
-                    	elevadorMaisUsado.clear();
-                    	elevadorMaisUsado.add(entry.getKey().charAt(0));
-                        currentMaxValuevalue = entry.getValue();
-                    } else if (entry.getValue() == currentMaxValuevalue){
-                    	elevadorMaisUsado.add(entry.getKey().charAt(0));
-                    }            
-                }
-                System.out.println(elevadorMaisUsado);
-		 }
-	        catch(FileNotFoundException fe)
-	        {
-	            fe.printStackTrace();
-	        }
-	        catch(Exception e)
-	        {
-	            e.printStackTrace();
-	        }
-		
 	}
 }
